@@ -18,7 +18,7 @@ const crearUsuario = async (req, res) => {
 		let usuario = await Usuario.findOne({ email });
 
 		if (usuario) {
-			return res.json({
+			return res.status(400).json({
 				msg: 'Un usuario ya existe en este correo',
 			});
 		}
@@ -32,12 +32,12 @@ const crearUsuario = async (req, res) => {
 		//guardar usuario en DB
 		await usuario.save();
 
-		res.json({
+		res.status(201).json({
 			msg: 'Usuario Registrado correctamente',
 		});
 	} catch (error) {
 		console.log(error);
-		res.json({
+		res.status(500).json({
 			msg: 'por favor contactate con el adminstrador',
 		});
 	}
@@ -59,7 +59,7 @@ const loginUsuario = async (req, res) => {
 		let usuario = await Usuario.findOne({ email });
 
 		if (!usuario) {
-			return res.json({
+			return res.status(400).json({
 				msg: 'email o contraseña incorrectos',
 			});
 		}
@@ -68,17 +68,17 @@ const loginUsuario = async (req, res) => {
 		const validarContraseña = bcrypt.compareSync(password, usuario.password);
 
 		if (!validarContraseña) {
-			return res.json({
+			return res.status(400).json({
 				msg: 'email o contraseña incorrectos',
 			});
 		}
 
-		res.json({
+		res.status(200).json({
 			msg: 'usuario logueado correctamente',
 		});
 	} catch (error) {
 		console.log(error);
-		res.json({
+		res.status(500).json({
 			msg: 'por favor contactate con el adminstrador',
 		});
 	}

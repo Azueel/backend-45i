@@ -6,21 +6,24 @@ const {
 	editarProducto,
 	eliminarProducto,
 } = require('../controllers/admin.controllers');
+const { validarJWT } = require('../middlewares/validar-jwt');
 // const { check } = require('express-validator');
 
 const routerAdmin = express.Router();
 
-routerAdmin.get('/usuarios', cargarUsuarios);
+routerAdmin.get('/usuarios', validarJWT, cargarUsuarios);
 
 routerAdmin.post(
 	'/new',
-	/*aca van las validaciones de express validator (name,precio,descripcion)*/ crearProducto
+	validarJWT,
+	/*aca van las validaciones de express validator (name,precio,descripcion)*/
+	crearProducto
 );
 
-routerAdmin.get('/productos', cargarProductos);
+routerAdmin.get('/productos', validarJWT, cargarProductos);
 
-routerAdmin.put('/editar', editarProducto);
+routerAdmin.put('/editar', validarJWT, editarProducto);
 
-routerAdmin.delete('/eliminar/:id', eliminarProducto);
+routerAdmin.delete('/eliminar/:id', validarJWT, eliminarProducto);
 
 module.exports = routerAdmin;
